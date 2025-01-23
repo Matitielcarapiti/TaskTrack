@@ -10,16 +10,16 @@
             margin: 20px;
             background-color: #f0f0f0;
             color: #333;
-            transition: background-color 0.5s ease;
+            transition: background-color 0.5s ease, background-image 0.5s ease;
         }
-        .tarea {
+        .tarea, .nota {
             background: #e9ecef;
             padding: 10px;
             border-radius: 8px;
             margin: 5px 0;
             transition: all 0.3s ease;
         }
-        .tarea:hover {
+        .tarea:hover, .nota:hover {
             transform: scale(1.05);
             background-color: #d1ecf1;
         }
@@ -35,15 +35,23 @@
         button:hover {
             background-color: #0056b3;
         }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
         #colorPickerContainer {
-            position: fixed;
-            top: 150px;
+            position: absolute;
+            top: 140px;
             right: 20px;
             background: #ffffff;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             display: none;
+            max-width: 300px;
+            width: 100%;
         }
         #presetColors {
             display: grid;
@@ -64,8 +72,8 @@
         }
         #toggleColorPicker {
             position: fixed;
-            top: 100px;
-            right: 20px;
+            top: 112.3px;
+            right: 135px;
             background-color: #007bff;
             color: white;
             border: none;
@@ -77,20 +85,14 @@
         #toggleColorPicker:hover {
             background-color: #0056b3;
         }
-        h1 {
-            text-align: center;
-            color: #4CAF50;
-        }
     </style>
 </head>
 <body>
     <!-- Botón para abrir/cerrar el selector de color -->
     <button id="toggleColorPicker"></button>
 
-    <!-- Contenedor del selector de colores -->
     <div id="colorPickerContainer">
         <div id="presetColors">
-            <div class="color-card" style="background-color: #ffffff;" onclick="setBackgroundColor('#ffffff')"></div>
             <div class="color-card" style="background-color: #000000;" onclick="setBackgroundColor('#000000')"></div>
             <div class="color-card" style="background-color: #ff0000;" onclick="setBackgroundColor('#ff0000')"></div>
             <div class="color-card" style="background-color: #00ff00;" onclick="setBackgroundColor('#00ff00')"></div>
@@ -98,71 +100,132 @@
             <div class="color-card" style="background-color: #ffeb3b;" onclick="setBackgroundColor('#ffeb3b')"></div>
             <div class="color-card" style="background-color: #9c27b0;" onclick="setBackgroundColor('#9c27b0')"></div>
             <div class="color-card" style="background-color: #e91e63;" onclick="setBackgroundColor('#e91e63')"></div>
+            <div class="color-card" style="background-color: #4caf50;" onclick="setBackgroundColor('#4caf50')"></div>
         </div>
         <input type="color" id="colorPicker" value="#f0f0f0" title="Elige un color de fondo">
     </div>
 
     <h1>TaskTrack: Organiza tu Tiempo</h1>
+
+    <!-- Formulario para tareas -->
     <form id="formTarea">
         <input type="text" id="tarea" placeholder="Nueva tarea..." required>
+        <input type="date" id="fechaTarea">
         <button type="submit">Agregar</button>
     </form>
-    <h2>Lista de Tareas Pendientes</h2>
+    <h2>Lista de Tareas</h2>
     <div id="listaTareas"></div>
 
+    <!-- Formulario para notas -->
+    <form id="formNota">
+        <input type="text" id="nota" placeholder="Nueva nota..." required>
+        <button type="submit">Agregar Nota</button>
+    </form>
+    <h2>Bloc de Notas</h2>
+    <div id="listaNotas"></div>
+
     <script>
-        const form = document.getElementById('formTarea');
+        const formTarea = document.getElementById('formTarea');
         const listaTareas = document.getElementById('listaTareas');
+        const formNota = document.getElementById('formNota');
+        const listaNotas = document.getElementById('listaNotas');
         const colorPicker = document.getElementById('colorPicker');
         const colorPickerContainer = document.getElementById('colorPickerContainer');
         const toggleColorPickerButton = document.getElementById('toggleColorPicker');
 
         let tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+        let notas = JSON.parse(localStorage.getItem('notas')) || [];
 
-        // Cargar el color de fondo guardado en localStorage
+        // Cargar color de fondo
         const savedColor = localStorage.getItem('backgroundColor');
         if (savedColor) {
             document.body.style.backgroundColor = savedColor;
             colorPicker.value = savedColor;
         }
 
-        // Mostrar tareas guardadas al cargar
         tareas.forEach(mostrarTarea);
+        notas.forEach(mostrarNota);
 
-        form.addEventListener('submit', function(e) {
+        formTarea.addEventListener('submit', function(e) {
             e.preventDefault();
             const tarea = document.getElementById('tarea').value;
-            tareas.push(tarea);
+            const fecha = document.getElementById('fechaTarea').value;
+            const nuevaTarea = { tarea, fecha };
+            tareas.push(nuevaTarea);
             localStorage.setItem('tareas', JSON.stringify(tareas));
-            mostrarTarea(tarea);
-            form.reset();
+            mostrarTarea(nuevaTarea);
+            formTarea.reset();
         });
 
-        function mostrarTarea(tarea) {
+        formNota.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nota = document.getElementById('nota').value;
+            notas.push(nota);
+            localStorage.setItem('notas', JSON.stringify(notas));
+            mostrarNota(nota);
+            formNota.reset();
+        });
+
+        function mostrarTarea({ tarea, fecha }) {
             const div = document.createElement('div');
             div.className = 'tarea';
-            div.textContent = tarea;
+            div.innerHTML = `<span>${tarea} ${fecha ? '(' + fecha + ')' : ''}</span>`;
 
-            const completarBtn = document.createElement('button');
-            completarBtn.textContent = 'Completada';
-            completarBtn.addEventListener('click', function() {
-                div.style.textDecoration = 'line-through';
+            const editarBtn = document.createElement('button');
+            editarBtn.textContent = 'Editar';
+            editarBtn.addEventListener('click', function() {
+                const nuevaTarea = prompt('Editar tarea:', tarea);
+                if (nuevaTarea !== null) {
+                    const index = tareas.findIndex(t => t.tarea === tarea);
+                    tareas[index].tarea = nuevaTarea;
+                    localStorage.setItem('tareas', JSON.stringify(tareas));
+                    div.querySelector('span').textContent = nuevaTarea;
+                }
             });
 
             const eliminarBtn = document.createElement('button');
             eliminarBtn.textContent = 'Eliminar';
             eliminarBtn.addEventListener('click', function() {
-                tareas = tareas.filter(t => t !== tarea);
+                tareas = tareas.filter(t => t.tarea !== tarea);
                 localStorage.setItem('tareas', JSON.stringify(tareas));
                 div.remove();
             });
 
-            div.appendChild(completarBtn);
+            div.appendChild(editarBtn);
             div.appendChild(eliminarBtn);
             listaTareas.appendChild(div);
         }
 
-        // Cambiar el color de fondo
+        function mostrarNota(nota) {
+            const div = document.createElement('div');
+            div.className = 'nota';
+            div.innerHTML = `<span>${nota}</span>`;
+
+            const editarBtn = document.createElement('button');
+            editarBtn.textContent = 'Editar';
+            editarBtn.addEventListener('click', function() {
+                const nuevaNota = prompt('Editar nota:', nota);
+                if (nuevaNota !== null) {
+                    const index = notas.indexOf(nota);
+                    notas[index] = nuevaNota;
+                    localStorage.setItem('notas', JSON.stringify(notas));
+                    div.querySelector('span').textContent = nuevaNota;
+                }
+            });
+
+            const eliminarBtn = document.createElement('button');
+            eliminarBtn.textContent = 'Eliminar';
+            eliminarBtn.addEventListener('click', function() {
+                notas = notas.filter(n => n !== nota);
+                localStorage.setItem('notas', JSON.stringify(notas));
+                div.remove();
+            });
+
+            div.appendChild(editarBtn);
+            div.appendChild(eliminarBtn);
+            listaNotas.appendChild(div);
+        }
+
         colorPicker.addEventListener('input', function() {
             const color = colorPicker.value;
             setBackgroundColor(color);
@@ -173,7 +236,6 @@
             localStorage.setItem('backgroundColor', color);
         }
 
-        // Alternar visibilidad del selector de color
         toggleColorPickerButton.addEventListener('click', function() {
             if (colorPickerContainer.style.display === 'none' || colorPickerContainer.style.display === '') {
                 colorPickerContainer.style.display = 'block';
