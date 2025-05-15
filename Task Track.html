@@ -1,199 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskTrack: Organiza tu Tiempo</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 20px;
-            background-color: #f0f0f0; /* Color de fondo m�s suave */
-            color: #333;
-            transition: background-color 0.5s ease, background-image 0.5s ease;
-        }
-        .tarea {
-            background: #e9ecef;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 5px 0;
-            transition: all 0.3s ease;
-        }
-        .tarea:hover {
-            transform: scale(1.05);
-            background-color: #d1ecf1;
-        }
-        button {
-            margin-left: 10px;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #colorPickerContainer {
-            position: absolute;
-            top: 140px; /* Ajustado para estar debajo de la barra de tareas */
-            right: 20px;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            display: none; /* Inicialmente oculto */
-            max-width: 300px;
-            width: 100%;
-        }
-        #presetColors {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .color-card {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .color-card:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        #toggleColorPicker {
-            position: fixed;
-            top: 112.3px; /* Ajustado para estar debajo de la barra de agregar tareas */
-            right: 135px; /* Aseguramos que est� a la derecha */
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            padding: 16px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-        #toggleColorPicker:hover {
-            background-color: #0056b3;
-        }
-        h1 {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            color: #4CAF50;
-            margin-top: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Asociación de Ayuda a Personas con Dependencia</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; color: #333; }
+    header, footer { background: #2a5d84; color: white; padding: 10px; text-align: center; }
+    section { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; }
+    form { display: flex; flex-direction: column; gap: 10px; }
+    label { font-weight: bold; }
+    input, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    button { background: #2a5d84; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #1e4a68; }
+  </style>
 </head>
 <body>
-    <!-- Bot�n para abrir/cerrar el selector de color -->
-    <button id="toggleColorPicker"></button>
 
-    <div id="colorPickerContainer">
-        <div id="presetColors">
-            <div class="color-card" style="background-color: #000000;" onclick="setBackgroundColor('#000000')"></div>
-            <div class="color-card" style="background-color: #ff0000;" onclick="setBackgroundColor('#ff0000')"></div>
-            <div class="color-card" style="background-color: #00ff00;" onclick="setBackgroundColor('#00ff00')"></div>
-            <div class="color-card" style="background-color: #0000ff;" onclick="setBackgroundColor('#0000ff')"></div>
-            <div class="color-card" style="background-color: #ffeb3b;" onclick="setBackgroundColor('#ffeb3b')"></div>
-            <div class="color-card" style="background-color: #9c27b0;" onclick="setBackgroundColor('#9c27b0')"></div>
-            <div class="color-card" style="background-color: #e91e63;" onclick="setBackgroundColor('#e91e63')"></div>
-            <div class="color-card" style="background-color: #4caf50;" onclick="setBackgroundColor('#4caf50')"></div>
-        </div>
+<header>
+  <h1>Asociación de Ayuda a Personas con Dependencia</h1>
+</header>
 
-        <input type="color" id="colorPicker" value="#f0f0f0" title="Elige un color de fondo">
-    </div>
+<section>
+  <h2>¿Quiénes somos?</h2>
+  <p>
+    Somos una asociación sin ánimo de lucro dedicada a apoyar a personas en situación de dependencia. Nuestro objetivo es garantizar su bienestar, fomentar su integración social y defender sus derechos, en especial el derecho a un nivel de vida digno, tal como establece el <a href="https://www.unidosporlosderechoshumanos.es/course/lesson/articles-19-25/read-article-25.html">artículo 25 de la Declaración Universal de los Derechos Humanos.</a>
+  </p>
+</section>
 
-    <h1>
-         TaskTrack: Organiza tu Tiempo
-    </h1>
-    <form id="formTarea">
-        <input type="text" id="tarea" placeholder="Nueva tarea..." required>
-        <button type="submit">Agregar</button>
-    </form>
-    <h2>
-     Lista de Tareas Pendientes 
-    </h2>
-    <div id="listaTareas"></div>
+<section>
+  <h2>Formulario para Pedir Ayuda</h2>
+  <form>
+    <label for="nombre1">Nombre completo:</label>
+    <input type="text" id="nombre1" name="nombre1">
 
-    <script>
-        const form = document.getElementById('formTarea');
-        const listaTareas = document.getElementById('listaTareas');
-        const colorPicker = document.getElementById('colorPicker');
-        const colorPickerContainer = document.getElementById('colorPickerContainer');
-        const toggleColorPickerButton = document.getElementById('toggleColorPicker');
+    <label for="email1">Correo electrónico:</label>
+    <input type="email" id="email1" name="email1">
 
-        let tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+    <label for="tipo-ayuda">Tipo de ayuda que necesitas:</label>
+    <textarea id="tipo-ayuda" rows="4"></textarea>
 
-        // Cargar el color de fondo guardado en localStorage (si existe)
-        const savedColor = localStorage.getItem('backgroundColor');
-        if (savedColor) {
-            document.body.style.backgroundColor = savedColor;
-            colorPicker.value = savedColor; // Para que el selector de color tambi�n se actualice
-        } else {
-            document.body.style.backgroundColor = '#f0f0f0'; // Color por defecto
-        }
+    <button type="submit">Enviar solicitud</button>
+  </form>
+</section>
 
-        // Mostrar tareas guardadas al cargar
-        tareas.forEach(mostrarTarea);
+<section>
+  <h2>Formulario para Ofrecer Ayuda</h2>
+  <form>
+    <label for="nombre2">Nombre completo:</label>
+    <input type="text" id="nombre2" name="nombre2">
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const tarea = document.getElementById('tarea').value;
-            tareas.push(tarea);
-            localStorage.setItem('tareas', JSON.stringify(tareas));
-            mostrarTarea(tarea);
-            form.reset();
-        });
+    <label for="email2">Correo electrónico:</label>
+    <input type="email" id="email2" name="email2">
 
-        function mostrarTarea(tarea) {
-            const div = document.createElement('div');
-            div.className = 'tarea';
-            div.textContent = tarea;
+    <label for="tipo-apoyo">¿Qué tipo de ayuda puedes ofrecer?</label>
+    <textarea id="tipo-apoyo" rows="4"></textarea>
 
-            // Bot�n de completar
-            const completarBtn = document.createElement('button');
-            completarBtn.textContent = 'Completada';
-            completarBtn.addEventListener('click', function() {
-                div.style.textDecoration = 'line-through';
-            });
+    <button type="submit">Ofrecer ayuda</button>
+  </form>
+</section>
 
-            // Bot�n de eliminar
-            const eliminarBtn = document.createElement('button');
-            eliminarBtn.textContent = 'Eliminar';
-            eliminarBtn.addEventListener('click', function() {
-                tareas = tareas.filter(t => t !== tarea);
-                localStorage.setItem('tareas', JSON.stringify(tareas));
-                div.remove();
-            });
 
-            div.appendChild(completarBtn);
-            div.appendChild(eliminarBtn);
-            listaTareas.appendChild(div);
-        }
+<footer>
+  <p>&copy; 2025 Asociación de Ayuda. Todos los derechos reservados.</p>
+</footer>
 
-        // Cambiar el color de fondo con el selector de color
-        colorPicker.addEventListener('input', function() {
-            const color = colorPicker.value;
-            setBackgroundColor(color);
-        });
-
-        function setBackgroundColor(color) {
-            document.body.style.backgroundColor = color;
-            localStorage.setItem('backgroundColor', color); // Guardar el color seleccionado en localStorage
-        }
-
-        // Funci�n para alternar la visibilidad del panel de selecci�n de color
-        toggleColorPickerButton.addEventListener('click', function() {
-            if (colorPickerContainer.style.display === 'none' || colorPickerContainer.style.display === '') {
-                colorPickerContainer.style.display = 'block';
-            } else {
-                colorPickerContainer.style.display = 'none';
-            }
-        });
-    </script>
 </body>
 </html>
